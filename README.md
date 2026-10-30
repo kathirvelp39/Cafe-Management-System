@@ -108,8 +108,6 @@ FastAPI provides interactive API documentation through Swagger UI:
 
 **Kathirvel P**
 
-GitHub: [kathirvelp39](https://github.com/kathirvelp39)
-
 ---
 
 *This project was developed to simplify and organize cafe management operations through a web-based application.*

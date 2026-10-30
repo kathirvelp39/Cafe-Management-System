@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monika G Cafe Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="toast" class="toast hidden"></div>
+
+    <nav class="navbar">
+        <div class="logo">Monika G Cafe</div>
+        <div class="nav-links" style="display: flex; align-items: center; gap: 15px;">
+            <div id="user-role-badge" class="hidden" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 4px; font-weight: bold; text-transform: capitalize;"></div>
+            <button id="nav-logout" class="btn btn-outline hidden">Logout</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Auth Section -->
+        <section id="auth-section" class="glass-panel">
+            <div class="tabs">
+                <button class="tab active" data-target="login-form">Login</button>
+                <button class="tab" data-target="register-form">Register</button>
+                <button class="tab" data-target="otp-form">OTP Login</button>
+                <button class="tab" data-target="reset-form">Reset Password</button>
+            </div>
+
+            <div class="form-container">
+                <!-- Login Form -->
+                <form id="login-form" class="auth-form active">
+                    <h2>Welcome Back</h2>
+                    <div class="input-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" required placeholder="Enter your email">
+                    </div>
+                    <div class="input-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                </form>
+
+                <!-- Register Form -->
+                <form id="register-form" class="auth-form">
+                    <h2>Create Account</h2>
+                    <div class="input-group">
+                        <label for="reg-name">Full Name</label>
+                        <input type="text" id="reg-name" required placeholder="John Doe">
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-email">Email</label>
+                        <input type="email" id="reg-email" required placeholder="john@example.com">
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-phone">Phone Number</label>
+                        <input type="tel" id="reg-phone" placeholder="+1234567890">
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-password">Password</label>
+                        <input type="password" id="reg-password" required placeholder="Create a password">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Register</button>
+                </form>
+
+                <!-- OTP Login Flow -->
+                <form id="otp-form" class="auth-form">
+                    <h2>Login with OTP</h2>
+                    <div id="otp-step-1">
+                        <div class="input-group">
+                            <label for="otp-email">Email</label>
+                            <input type="email" id="otp-email" required placeholder="Enter your email">
+                        </div>
+                        <button type="button" id="btn-request-otp" class="btn btn-primary btn-block">Request OTP</button>
+                    </div>
+                    <div id="otp-step-2" class="hidden">
+                        <div class="input-group">
+                            <label for="otp-code">Enter OTP</label>
+                            <input type="text" id="otp-code" placeholder="6-digit code">
+                        </div>
+                        <button type="button" id="btn-verify-otp" class="btn btn-primary btn-block">Verify OTP</button>
+                    </div>
+                </form>
+
+                <!-- Reset Password Form -->
+                <form id="reset-form" class="auth-form">
+                    <h2>Reset Password</h2>
+                    <div class="input-group">
+                        <label for="reset-email">Email</label>
+                        <input type="email" id="reset-email" required placeholder="Enter your email">
+                    </div>
+                    <div class="input-group">
+                        <label for="reset-password-new">New Password</label>
+                        <input type="password" id="reset-password-new" required placeholder="Enter new password">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Reset Password</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Dashboard Section (Admin/Management) -->
+        <section id="dashboard-section" class="hidden dashboard-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar glass-panel">
+                <div class="sidebar-menu">
+                    <button class="nav-btn active" data-view="view-profile" data-role="all">My Profile</button>
+                    <button class="nav-btn" data-view="view-menu" data-role="admin,manager,waiter">Menu</button>
+                    <button class="nav-btn" data-view="view-orders" data-role="admin,manager,chef,waiter">Orders & Kitchen</button>
+                    <button class="nav-btn" data-view="view-billing" data-role="admin,manager">Billing</button>
+                    <button class="nav-btn" data-view="view-inventory" data-role="admin,manager">Inventory</button>
+                    <button class="nav-btn" data-view="view-employees" data-role="admin,manager">Employees</button>
+                    <button class="nav-btn" data-view="view-reports" data-role="admin">Reports</button>
+                    <button class="nav-btn" data-view="view-reservations" data-role="admin,manager,waiter">Reservations</button>
+                    <button class="nav-btn" data-view="view-feedback" data-role="admin,manager">Feedback</button>
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <div class="main-content">
+                
+                <!-- PROFILE VIEW -->
+                <div id="view-profile" class="dashboard-view active">
+                    <header class="dashboard-header glass-panel">
+                        <div class="profile-info">
+                            <h1 id="user-greeting">Hello, User</h1>
+                            <p id="user-email">user@example.com</p>
+                        </div>
+                        <div class="loyalty-badge">
+                            <span class="loyalty-label">Total Points</span>
+                            <span id="loyalty-total" class="loyalty-value">0</span>
+                        </div>
+                    </header>
+
+                    <div class="dashboard-grid">
+                        <div class="glass-panel orders-panel">
+                            <div class="panel-header">
+                                <h2>My Recent Orders</h2>
+                            </div>
+                            <div id="orders-list" class="orders-list">
+                                <div class="empty-state">Loading...</div>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel loyalty-panel">
+                            <div class="panel-header">
+                                <h2>Loyalty History</h2>
+                            </div>
+                            <div id="loyalty-history-list" class="loyalty-list">
+                                <div class="empty-state">Loading...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MENU VIEW -->
+                <div id="view-menu" class="dashboard-view hidden">
+                    <div class="glass-panel full-panel">
+                        <div class="panel-header">
+                            <h2>Menu Management</h2>
+                            <div>
+                                <button id="btn-add-menu" class="btn btn-sm btn-primary">Add Item</button>
+                                <button id="btn-refresh-menu" class="btn btn-sm btn-outline">Refresh</button>
+                            </div>
+                        </div>
+                        
+                        <form id="menu-item-form" class="auth-form" style="margin-bottom: 20px;">
+                            <h3 id="menu-form-title">Create Menu Item</h3>
+                            <input type="hidden" id="menu-id">
+                            <div class="input-group">
+                                <label for="menu-name">Name</label>
+                                <input type="text" id="menu-name" required placeholder="Item Name">
+                            </div>
+                            <div class="input-group">
+                                <label for="menu-description">Description</label>
+                                <input type="text" id="menu-description" placeholder="Description">
+                            </div>
+                            <div class="input-group">
+                                <label for="menu-category">Category</label>
+                                <input type="text" id="menu-category" required placeholder="e.g. drinks, food">
+                            </div>
+                            <div class="input-group">
+                                <label for="menu-price">Price</label>
+                                <input type="number" step="0.01" id="menu-price" required placeholder="0.00">
+                            </div>
+                            <div class="input-group" style="flex-direction: row; align-items: center; gap: 10px;">
+                                <label for="menu-available" style="margin-bottom: 0;">Is Available?</label>
+                                <input type="checkbox" id="menu-available" checked>
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                <button type="submit" class="btn btn-primary" style="flex: 1;">Save</button>
+                                <button type="button" id="btn-cancel-menu" class="btn btn-outline" style="flex: 1;">Cancel</button>
+                            </div>
+                        </form>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-menu">
+                                    <tr><td colspan="6" class="empty-state">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ORDERS VIEW -->
+                <div id="view-orders" class="dashboard-view hidden">
+                    <div class="glass-panel full-panel">
+                        <div class="panel-header">
+                            <h2>All Orders (Kitchen)</h2>
+                            <div>
+                                <button id="btn-add-order" class="btn btn-sm btn-primary">Add Order</button>
+                                <button id="btn-refresh-admin-orders" class="btn btn-sm btn-outline">Refresh</button>
+                            </div>
+                        </div>
+
+                        <form id="order-form" class="auth-form" style="margin-bottom: 20px;">
+                            <h3 id="order-form-title">Create Order</h3>
+                            <div class="input-group">
+                                <label for="order-type">Order Type</label>
+                                <select id="order-type" required>
+                                    <option value="dine-in">Dine-in</option>
+                                    <option value="takeaway">Takeaway</option>
+                                    <option value="online">Online</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="order-table">Table Number (Optional)</label>
+                                <input type="number" id="order-table" placeholder="e.g. 5">
+                            </div>
+                            <div class="input-group">
+                                <label>Select Menu Items</label>
+                                <div id="order-menu-items-container" style="max-height: 250px; overflow-y: auto; border: 1px solid var(--glass-border); border-radius: 6px; padding: 10px; background: rgba(0,0,0,0.2);">
+                                    <div class="empty-state">Loading menu items...</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                <button type="submit" class="btn btn-primary" style="flex: 1;">Place Order</button>
+                                <button type="button" id="btn-cancel-order-form" class="btn btn-outline" style="flex: 1;">Cancel</button>
+                            </div>
+                        </form>
+
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Type</th>
+                                        <th>Table</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-admin-orders">
+                                    <tr><td colspan="6" class="empty-state">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BILLING VIEW -->
+                <div id="view-billing" class="dashboard-view hidden">
+                    <div class="glass-panel full-panel">
+                        <div class="panel-header">
+                            <h2>Billing (Demo)</h2>
+                        </div>
+                        <div class="form-container">
+                            <form id="generate-invoice-form" class="inline-form">
+                                <input type="number" id="invoice-order-id" placeholder="Order ID" required>
+                                <button type="submit" class="btn btn-primary">Generate Invoice</button>
+                            </form>
+                            <div id="billing-result" class="result-box"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INVENTORY VIEW -->
+                <div id="view-inventory" class="dashboard-view hidden">
+                    <div class="glass-panel full-panel">
+                        <div class="panel-header">
+                            <h2>Inventory Management</h2>
+                            <div>
+                                <button id="btn-add-ingredient" class="btn btn-sm btn-primary">Add Ingredient</button>
+                                <button id="btn-add-supplier" class="btn btn-sm btn-outline">Add Supplier</button>
+                                <button id="btn-refresh-inventory" class="btn btn-sm btn-outline">Refresh</button>
+                            </div>
+                        </div>
+
+                        <!-- Add Ingredient Form -->
+                        <form id="ingredient-form" class="auth-form" style="margin-bottom: 20px;">
+                            <h3 id="ingredient-form-title">Add Ingredient</h3>
+                            <div class="input-group">
+                                <label for="ingredient-name">Name</label>
+                                <input type="text" id="ingredient-name" required>
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <div class="input-group" style="flex: 1;">
+                                    <label for="ingredient-unit">Unit</label>
+                                    <input type="text" id="ingredient-unit" placeholder="e.g. kg, liters" required>
+                                </div>
+                                <div class="input-group" style="flex: 1;">
+                                    <label for="ingredient-min-stock">Min Stock</label>
+                                    <input type="number" id="ingredient-min-stock" step="0.01" value="10">
+                                </div>
+                                <div class="input-group" style="flex: 1;">
+                                    <label for="ingredient-initial-stock">Initial Stock</label>
+                                    <input type="number" id="ingredient-initial-stock" step="0.01" value="0">
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                <button type="submit" class="btn btn-primary" style="flex: 1;">Save Ingredient</button>
+                                <button type="button" id="btn-cancel-ingredient" class="btn btn-outline" style="flex: 1;">Cancel</button>
+                            </div>
+                        </form>
+
+                        <!-- Add Supplier Form -->
+                        <form id="supplier-form" class="auth-form" style="margin-bottom: 20px;">
+                            <h3 id="supplier-form-title">Add Supplier</h3>
+                            <div class="input-group">
+                                <label for="supplier-name">Supplier Name</label>
+                                <input type="text" id="supplier-name" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="supplier-contact">Contact Person</label>
+                                <input type="text" id="supplier-contact">
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <div class="input-group" style="flex: 1;">
+                                    <label for="supplier-email">Email</label>
+                                    <input type="email" id="supplier-email">
+                                </div>
+                                <div class="input-group" style="flex: 1;">
+                                    <label for="supplier-phone">Phone</label>
+                                    <input type="text" id="supplier-phone">
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                <button type="submit" class="btn btn-primary" style="flex: 1;">Save Supplier</button>
+                                <button type="button" id="btn-cancel-supplier" class="btn btn-outline" style="flex: 1;">Cancel</button>
+                            </div>
+                        </form>
+
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Stock Level</th>
+                                        <th>Unit</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-inventory">
+                                    <tr><td colspan="5" class="empty-state">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REPORTS VIEW -->
+                <div id="view-reports" class="dashboard-view hidden">
+                    <div class="glass-panel full-panel" style="margin-bottom: 20px;">
+                        <div class="panel-header">
+                            <h2>Sales Report</h2>
+                            <button id="btn-refresh-reports" class="btn btn-sm btn-primary">Refresh</button>
+                        </div>
+                        <div id="reports-summary" class="summary-cards">
+                            <div class="card">
+                                <h3>Total Orders</h3>
+                                <p id="report-orders">0</p>
+                            </div>
+                            <div class="card">
+                                <h3>Total Revenue</h3>
+                                <p id="report-revenue">₹0.00</p>
+                            </div>
+                            <div class="card">
+                                <h3>Avg Order Value</h3>
+                                <p id="report-aov">₹0.00</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div class="glass-panel" style="padding: 1.5rem;">
+                            <h3 style="margin-bottom: 1rem;">Top Selling Items</h3>
+                            <table class="data-table">
+                                <thead><tr><th>Item</th><th>Qty Sold</th></tr></thead>
+                                <tbody id="table-report-top-items"><tr><td colspan="2">Loading...</td></tr></tbody>
+                            </table>
+                        </div>
+                        <div class="glass-panel" style="padding: 1.5rem;">
+                            <h3 style="margin-bottom: 1rem;">Revenue by Method</h3>
+                            <table class="data-table">
+                                <thead><tr><th>Method</th><th>Revenue</th></tr></thead>
+                                <tbody id="table-report-revenue"><tr><td colspan="2">Loading...</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 2rem;">
+                        <div class="glass-panel" style="padding: 1.5rem;">
+                            <h3 style="margin-bottom: 1rem;">Inventory Consumption (30 Days)</h3>
+                            <table class="data-table">
+                                <thead><tr><th>Ingredient</th><th>Qty Consumed</th></tr></thead>
+                                <tbody id="table-report-inventory"><tr><td colspan="2">Loading...</td></tr></tbody>
+                            </table>
+                        </div>
+                        <div class="glass-panel" style="padding: 1.5rem;">
+                            <h3 style="margin-bottom: 1rem;">Top Customers</h3>
+                            <table class="data-table">
+                                <thead><tr><th>Customer ID</th><th>Orders</th><th>Spent</th></tr></thead>
+                                <tbody id="table-report-customers"><tr><td colspan="3">Loading...</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RESERVATIONS VIEW -->
+                <div id="view-reservations" class="dashboard-view hidden">
+                    <div class="glass-panel full-panel" style="margin-bottom: 20px;">
+                        <div class="panel-header">
+                            <h2>Reservations Management</h2>
+                            <button id="btn-refresh-reservations" class="btn btn-sm btn-primary">Refresh</button>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                            <!-- Add Table Form -->
+                            <form id="form-add-table" class="glass-panel" style="padding: 1.5rem; margin:0;">
+                                <h3 style="margin-bottom: 1rem;">Add Dining Table</h3>
+                                <div class="input-group">
+                                    <label>Table Number</label>
+                                    <input type="number" id="res-table-number" required>
+                                </div>
+                                <div class="input-group">
+                                    <label>Capacity</label>
+                                    <input type="number" id="res-table-capacity" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width:100%">Add Table</button>
+                            </form>
+                            
+                            <!-- Book Table Form -->
+                            <form id="form-book-table" class="glass-panel" style="padding: 1.5rem; margin:0;">
+                                <h3 style="margin-bottom: 1rem;">Book a Table</h3>
+                                <div style="display: flex; gap: 10px;">
+                                    <div class="input-group" style="flex:1;">
+                                        <label>Table</label>
+                                        <select id="book-table-id" required style="width: 100%; padding: 0.75rem 1rem; border-radius: 8px; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); color: var(--text-primary); font-family: inherit;"><option value="">Select Table...</option></select>
+                                    </div>
+                                    <div class="input-group" style="flex:1;">
+                                        <label>Guests</label>
+                                        <input type="number" id="book-guests" required>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label>Time</label>
+                                    <input type="datetime-local" id="book-time" required style="width: 100%; padding: 0.75rem 1rem; border-radius: 8px; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); color: var(--text-primary); font-family: inherit;">
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width:100%">Book Table</button>
+                            </form>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Table #</th>
+                                        <th>Time</th>
+                                        <th>Guests</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-reservations">
+                                    <tr><td colspan="6" class="empty-state">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FEEDBACK VIEW -->
+                <div id="view-feedback" class="dashboard-view hidden">
+                    <div class="glass-panel full-panel" style="margin-bottom: 20px;">
+                        <div class="panel-header">
+                            <h2>Customer Feedback</h2>
+                            <button id="btn-refresh-feedback" class="btn btn-sm btn-primary">Refresh</button>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <form id="form-submit-feedback" class="glass-panel" style="padding: 1.5rem; margin:0;">
+                                <h3 style="margin-bottom: 1rem;">Submit Feedback</h3>
+                                <div style="display: flex; gap: 10px;">
+                                    <div class="input-group" style="flex:1;">
+                                        <label>Customer ID</label>
+                                        <input type="number" id="fb-customer-id" required>
+                                    </div>
+                                    <div class="input-group" style="flex:1;">
+                                        <label>Order ID (Optional)</label>
+                                        <input type="number" id="fb-order-id">
+                                    </div>
+                                    <div class="input-group" style="flex:1;">
+                                        <label>Rating (1-5)</label>
+                                        <input type="number" id="fb-rating" min="1" max="5" required>
+                                    </div>
+                                    <div class="input-group" style="flex:1; display:flex; align-items:center; gap: 5px; margin-top: 1.5rem;">
+                                        <input type="checkbox" id="fb-is-complaint" style="width:auto;">
+                                        <label style="margin:0;">Is Complaint?</label>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <label>Comments</label>
+                                    <input type="text" id="fb-comments" placeholder="Optional comments...">
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width:100%">Submit Feedback</button>
+                            </form>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Customer</th>
+                                        <th>Order ID</th>
+                                        <th>Rating</th>
+                                        <th>Comment</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-feedback">
+                                    <tr><td colspan="7" class="empty-state">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EMPLOYEES VIEW -->
+                <div id="view-employees" class="dashboard-view hidden">
+                    <div class="glass-panel full-panel">
+                        <div class="panel-header">
+                            <h2>Employees</h2>
+                            <div>
+                                <button id="btn-add-employee" class="btn btn-sm btn-primary">Add Employee</button>
+                                <button id="btn-refresh-employees" class="btn btn-sm btn-outline">Refresh</button>
+                            </div>
+                        </div>
+
+                        <form id="employee-form" class="auth-form" style="margin-bottom: 20px;">
+                            <h3 id="employee-form-title">Add Employee</h3>
+                            <div style="display: flex; gap: 10px;">
+                                <div class="input-group" style="flex: 1;">
+                                    <label for="emp-name">Name</label>
+                                    <input type="text" id="emp-name" required>
+                                </div>
+                                <div class="input-group" style="flex: 1;">
+                                    <label for="emp-email">Email</label>
+                                    <input type="email" id="emp-email" required>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <div class="input-group" style="flex: 1;">
+                                    <label for="emp-phone">Phone</label>
+                                    <input type="text" id="emp-phone">
+                                </div>
+                                <div class="input-group" style="flex: 1;">
+                                    <label for="emp-role">Role</label>
+                                    <select id="emp-role" required>
+                                        <option value="Manager">Manager</option>
+                                        <option value="Chef">Chef</option>
+                                        <option value="Waiter">Waiter</option>
+                                        <option value="Admin">Admin</option>
+                                    </select>
+                                </div>
+                                <div class="input-group" style="flex: 1;">
+                                    <label for="emp-salary">Salary (₹)</label>
+                                    <input type="number" id="emp-salary" value="0">
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                <button type="submit" class="btn btn-primary" style="flex: 1;">Save Employee</button>
+                                <button type="button" id="btn-cancel-employee" class="btn btn-outline" style="flex: 1;">Cancel</button>
+                            </div>
+                        </form>
+
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-employees">
+                                    <tr><td colspan="5" class="empty-state">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js?v=9"></script>
+</body>
+</html>
